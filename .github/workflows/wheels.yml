@@ -1,0 +1,65 @@
+name: Build OpenVINO wheels
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
+
+jobs:
+  build_wheel:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-20.04, windows-2019]
+        python: [3.6, 3.8]
+        exclude:
+        - os: windows-2019
+          python: 3.6
+        - os: macos-11
+          python: 3.6
+    steps:
+
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        repository: helena-intel/openvino
+        ref: myriad_wheels
+        submodules: recursive
+    - uses: ilammy/msvc-dev-cmd@v1
+    - name: Set up Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python }}
+
+    - name: Install Linux build dependencies
+      run: |
+        ./install_build_dependencies.sh
+      if: runner.os == 'Linux'
+
+
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install -r src/bindings/python/src/compatibility/openvino/requirements-dev.txt
+        python -m pip install -r src/bindings/python/src/compatibility/openvino/requirements.txt
+        python -m pip install -r src/bindings/python/wheel/requirements-dev.txt
+
+    - name: Build wheel
+      run: |
+        python setup.py bdist_wheel
+      working-directory: src/bindings/python/wheel
+      env: 
+        WHEEL_VERSION: 2022.1.0
+        WHEEL_ENABLE_DEVICES: MYRIAD
+
+    - name: Create wheel artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: wheels
+        path: src/bindings/python/wheel/dist/*whl
+
+
