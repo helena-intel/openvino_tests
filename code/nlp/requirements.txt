@@ -1,0 +1,3 @@
+git+https://github.com/huggingface/optimum-intel.git@nncf
+nncf
+openvino-dev

@@ -1,0 +1,42 @@
+name: optimum
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  build_optimum:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-20.04,]
+        # python: [3.7, 3.8, 3.9,]
+        python: [3.8, ]
+        torch: [torch==1.9.*, torch==1.12.*]
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python }}
+
+    - name: Install requirements
+      run: |
+        python -m pip install -r code/nlp/requirements.txt
+        python -m pip install ${{ matrix.torch }}
+
+    - name: Run quantization script
+      working-directory: code/nlp
+      run: 
+        python quantize_qa.py
+
+    - name: Create artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: ir_files
+        path: code/nlp/models
