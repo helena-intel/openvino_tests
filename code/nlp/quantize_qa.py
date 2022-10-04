@@ -76,8 +76,8 @@ def quantize(model_id, dataset_name, preprocess_function, dataset_config=None):
     start_time = time.perf_counter()
     quantizer.quantize(
         save_directory=f"models/{model_id}_INT8",
-        #  quantization_config=DEFAULT_QUANTIZATION_CONFIG,
-        quantization_config=nncf_config,
+        quantization_config=DEFAULT_QUANTIZATION_CONFIG,
+        # quantization_config=nncf_config,
         calibration_dataset=calibration_dataset,
         batch_size=2
     )
