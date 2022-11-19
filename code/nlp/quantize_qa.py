@@ -8,8 +8,7 @@ import torch
 import transformers
 from datasets import load_dataset, load_metric
 from nncf import NNCFConfig
-from optimum.intel.openvino import (DEFAULT_QUANTIZATION_CONFIG,
-                                    OVModelForQuestionAnswering)
+from optimum.intel.openvino import OVModelForQuestionAnswering
 from optimum.intel.openvino.quantization import OVQuantizer
 from transformers import AutoModelForQuestionAnswering, AutoTokenizer, pipeline
 
@@ -76,8 +75,6 @@ def quantize(model_id, dataset_name, preprocess_function, dataset_config=None):
     start_time = time.perf_counter()
     quantizer.quantize(
         save_directory=f"models/{model_id}_INT8",
-        quantization_config=DEFAULT_QUANTIZATION_CONFIG,
-        # quantization_config=nncf_config,
         calibration_dataset=calibration_dataset,
         batch_size=2
     )
