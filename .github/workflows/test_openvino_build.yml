@@ -75,11 +75,11 @@ jobs:
         pytest tests/openvino/test_modeling.py
     - name: Test Quantization
       run: |
-        pytest test_quantization.py
+        pytest tests/openvino/test_quantization.py
     - name: Test Training
       run: |
-        pytest test_training.py
+        pytest tests/openvino/test_training.py
     - name: Test Training Examples
       run: |
-        pytest test_training_examples.py
+        pytest tests/openvino/test_training_examples.py
   
