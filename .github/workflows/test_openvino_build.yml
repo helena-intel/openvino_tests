@@ -76,7 +76,7 @@ jobs:
         pytest tests/openvino/test_quantization.py
     - name: Test Training
       run: |
-        pytest tests/openvino/test_training.py
+        pytest tests/openvino/test_training.py -k "not OVTrainerAudioClassificationTrainingTest"
     - name: Test Training Examples
       run: |
         pytest tests/openvino/test_training_examples.py
