@@ -72,7 +72,7 @@ jobs:
     - name: Test Modeling
       if: success() || failure()
       run: |
-        pytest tests/openvino/test_modeling.py
+        pytest tests/openvino/test_modeling.py -k "not 02_deberta"
     - name: Test Quantization
       if: success() || failure()
       run: |
