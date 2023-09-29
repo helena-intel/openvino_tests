@@ -11,6 +11,12 @@ on:
         description: 'Branch'
         required: true
         default: 'master'
+      os:
+        # only ubuntu-20.04 and 22.04 are tested, may need to change Python version or
+        # dependencies for other OSs
+        description: 'OS'
+        required: true
+        default: 'ubuntu-22.04'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
@@ -23,7 +29,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ["ubuntu-20.04","ubuntu-22.04"]
+        os:  [${{ github.event.inputs.os }},]
         python: ["3.8", "3.10"]
         exclude:
         - os: ubuntu-20.04
