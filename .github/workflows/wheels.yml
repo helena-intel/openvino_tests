@@ -2,6 +2,15 @@ name: Build OpenVINO wheels
 
 on:
   workflow_dispatch:
+    inputs:
+      repository:
+        description: 'Repository'     
+        required: true
+        default: 'openvinotoolkit/openvino'
+      branch:
+        description: 'Branch'
+        required: true
+        default: 'master'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
@@ -26,8 +35,8 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
       with:
-        repository: openvinotoolkit/openvino
-        ref: master
+        repository: github.event.inputs.repository
+        ref: github.event.inputs.branch
         submodules: recursive
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -58,6 +67,6 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: wheels
-        path: build/wheel
+        path: build/wheels
 
 
