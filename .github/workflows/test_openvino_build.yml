@@ -5,8 +5,13 @@ name: Build OpenVINO and Test Optimum
 on:
   push:
     branches: [ main ]
+    paths:
+      - '.github/workflows/test_openvino_build.yml'
+
   pull_request:
     branches: [ main ]
+    paths:
+      - '.github/workflows/test_openvino_build.yml'
   schedule:
     - cron:  '14 3 * * *'  # run every day at 3:14
   workflow_dispatch:
