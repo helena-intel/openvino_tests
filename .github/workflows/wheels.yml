@@ -30,11 +30,11 @@ jobs:
       matrix:
         os:  ["${{github.event.inputs.os}}",]
         python: ["3.8", "3.10"]
-        include:
+        exclude:
         - os: ubuntu-20.04
-          python: "3.8"
-        - os: ubuntu-22.04
           python: "3.10"
+        - os: ubuntu-22.04
+          python: "3.8"
     steps:
 
     - name: Checkout repository
