@@ -12,8 +12,7 @@ on:
         required: true
         default: 'master'
       os:
-        # only ubuntu-20.04 and 22.04 are tested, may need to change Python version or
-        # dependencies for other OSs
+        # only ubuntu-20.04 and 22.04 are tested. Change Python version or dependencies for other OSs
         description: 'OS'
         required: true
         default: 'ubuntu-22.04'
@@ -29,7 +28,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os:  [${{ github.event.inputs.os }},]
+        os:  ["${{github.event.inputs.os}}",]
         python: ["3.8", "3.10"]
         exclude:
         - os: ubuntu-20.04
