@@ -30,17 +30,17 @@ jobs:
       matrix:
         os:  ["${{github.event.inputs.os}}",]
         python: ["3.8", "3.10"]
-        exclude:
+        include:
         - os: ubuntu-20.04
-          python: "3.10"
-        - os: ubuntu-22.04
           python: "3.8"
+        - os: ubuntu-22.04
+          python: "3.10"
     steps:
 
     - name: Checkout repository
       uses: actions/checkout@v3
       with:
-        repository: ${{ github.event.inputs.repository }}/openvino
+        repository: ${{ github.event.inputs.repository }}
         ref: ${{ github.event.inputs.branch }}
         submodules: recursive
     - name: Set up Python
@@ -68,10 +68,15 @@ jobs:
         cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_INTEL_GPU=ON -DENABLE_OPENCV=OFF -DENABLE_OV_ONNX_FRONTEND=ON -DENABLE_DOCS=OFF -DENABLE_SAMPLES=OFF  -DENABLE_INTEL_MYRIAD=OFF -DENABLE_INTEL_GNA=OFF -DENABLE_PYTHON=ON -DENABLE_WHEEL=ON .. &&  make --jobs=$(nproc --all)
       working-directory: build
 
+    - name: Add info
+      run: |
+        git log -n 10 > build/wheels/info.txt
+        
+
     - name: Create wheel artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: wheels
+        name: wheels-${{ matrix.os }}
         path: build/wheels
 
 
