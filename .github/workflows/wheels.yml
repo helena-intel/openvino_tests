@@ -51,7 +51,7 @@ jobs:
     - name: Install Linux build dependencies
       run: |
         sudo -E ./install_build_dependencies.sh
-        sudo apt install intel-opencl-icd
+        sudo apt install intel-opencl-icd opencl-headers
       if: runner.os == 'Linux'
 
 
