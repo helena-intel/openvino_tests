@@ -12,8 +12,8 @@ on:
     branches: [ main ]
     paths:
       - '.github/workflows/test_openvino_build.yml'
-  schedule:
-    - cron:  '14 3 * * *'  # run every day at 3:14
+#  schedule:
+#    - cron:  '14 3 * * *'  # run every day at 3:14
   workflow_dispatch:
 
 concurrency:
