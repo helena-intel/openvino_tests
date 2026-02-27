@@ -29,10 +29,8 @@ jobs:
       fail-fast: false
       matrix:
         os:  ["${{github.event.inputs.os}}",]
-        python: ["3.8", "3.10"]
+        python: ["3.10", "3.12"]
         exclude:
-        - os: ubuntu-20.04
-          python: "3.10"
         - os: ubuntu-22.04
           python: "3.8"
     steps:
@@ -58,13 +56,13 @@ jobs:
     - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
+        python -m pip install -r src/bindings/python/requirements.txt
         python -m pip install -r src/bindings/python/wheel/requirements-dev.txt
         mkdir build
 
     - name: Build wheel
       run: |
-        # python setup.py bdist_wheel
-        cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_INTEL_GPU=ON -DENABLE_OPENCV=OFF -DENABLE_OV_ONNX_FRONTEND=ON -DENABLE_DOCS=OFF -DENABLE_SAMPLES=OFF  -DENABLE_INTEL_MYRIAD=OFF -DENABLE_INTEL_GNA=OFF -DENABLE_PYTHON=ON -DENABLE_WHEEL=ON .. &&  make --jobs=$(nproc --all)
+        cmake -G "Visual Studio 17 2022" -DENABLE_INTEL_GPU=ON -DENABLE_OPENCV=OFF -DENABLE_OV_ONNX_FRONTEND=ON -DENABLE_DOCS=OFF -DENABLE_SAMPLES=OFF -DENABLE_PYTHON=ON -DENABLE_WHEEL=ON .. &&  cmake --build . --config Release --verbose --parallel
       working-directory: build
 
     - name: Add info
